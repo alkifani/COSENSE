@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>570220862213-hsh7n0iqnvkhcp7dqr4gm4tk83ha6rof.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.570220862213-hsh7n0iqnvkhcp7dqr4gm4tk83ha6rof</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBcUWHdlFtx9ZuvMCUtpCfS4VnGYoTe9rU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>570220862213</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.coSense</string>
+	<key>PROJECT_ID</key>
+	<string>cosense-9d538</string>
+	<key>STORAGE_BUCKET</key>
+	<string>cosense-9d538.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:570220862213:ios:1123d02520c571a3bbb56c</string>
+	<key>DATABASE_URL</key>
+	<string>https://cosense-9d538-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
