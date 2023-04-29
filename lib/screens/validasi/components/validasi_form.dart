@@ -1,3 +1,6 @@
+//import 'package:co_sense/autentikasi/auth_screen.dart';
+//import 'package:co_sense/autentikasi/components/home.dart';
+import 'package:co_sense/autentikasi/components/login.dart';
 import 'package:flutter/material.dart';
 import 'package:co_sense/screens/login_success/login_success_screen.dart';
 
@@ -22,7 +25,14 @@ class _ValidasiFormState extends State<ValidasiForm> {
           SizedBox(height: getProportionateScreenHeight(40)),
           DefaultButton(
             text: "ONLINE",
-            press: () {},
+            press: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginScreen(),
+                ),
+              );
+            },
           ),
           SizedBox(height: getProportionateScreenHeight(40)),
           DefaultButton(
