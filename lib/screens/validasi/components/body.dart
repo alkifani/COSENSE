@@ -1,3 +1,4 @@
+import 'package:co_sense/autentikasi/components/login.dart';
 import 'package:flutter/material.dart';
 import '../../../size_config.dart';
 import 'validasi_form.dart';
@@ -31,7 +32,8 @@ class Body extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: SizeConfig.screenHeight * 0.08),
-                ValidasiForm(),
+                 ValidasiForm(),
+                // LoginScreen(),
                 SizedBox(height: SizeConfig.screenHeight * 0.08),
                 SizedBox(height: getProportionateScreenHeight(20)),
                 //NoAccountText(), //bagi tidak ad akun akan dipanggil
