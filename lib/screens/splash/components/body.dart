@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:co_sense/constants.dart';
 import 'package:co_sense/screens/validasi/validasi_screen.dart';
 import 'package:co_sense/size_config.dart';
+import 'package:co_sense/autentikasi/components/login.dart';
 
 // This is the best practice
 import '../components/splash_content.dart';
@@ -66,8 +67,16 @@ class _BodyState extends State<Body> {
                     DefaultButton(
                       text: "Continue",
                       press: () {
-                        Navigator.pushNamed(context, ValidasiScreen.routeName);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(),
+                          ),
+                        );
                       },
+                      // press: () {
+                      //   Navigator.pushNamed(context, ValidasiScreen.routeName);
+                      // },
                     ),
                     Spacer(),
                   ],
