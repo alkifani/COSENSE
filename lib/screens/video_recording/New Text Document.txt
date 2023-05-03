@@ -1,0 +1,59 @@
+To show and play videos in Firebase Cloud using Flutter, you need to use the video_player and firebase_storage packages. You also need to get the download URL of the video file from Firebase Storage and pass it to the VideoPlayerController.network constructor. Here are some steps you can follow:
+
+Add the dependencies to your pubspec.yaml file:
+dependencies:
+  video_player: ^2.2.7
+  firebase_storage: ^10.0.4
+Import the packages in your Dart file:
+import 'package:video_player/video_player.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+Create a VideoPlayerController instance and initialize it with the download URL of the video file:
+VideoPlayerController _controller;
+
+@override
+void initState() {
+  super.initState();
+  // Get the download URL of the video file from Firebase Storage
+  FirebaseStorage.instance.ref('videos/$videoFile').getDownloadURL().then((url) {
+    // Create and initialize the video player controller
+    _controller = VideoPlayerController.network(url);
+    _controller.initialize().then((_) {
+      // Update the UI when the controller is initialized
+      setState(() {});
+    });
+  });
+}
+Dispose the controller when not needed:
+@override
+void dispose() {
+  _controller.dispose();
+  super.dispose();
+}
+Display the video player widget in your build method:
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: Center(
+      child: _controller.value.isInitialized
+          ? AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: VideoPlayer(_controller),
+            )
+          : CircularProgressIndicator(),
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {
+        // Toggle the video playback state
+        setState(() {
+          _controller.value.isPlaying
+              ? _controller.pause()
+              : _controller.play();
+        });
+      },
+      child: Icon(
+        _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+      ),
+    ),
+  );
+}
+For more details and examples, you can check out these web search results

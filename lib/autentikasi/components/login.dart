@@ -40,24 +40,24 @@ class _LoginScreenState extends State<LoginScreen> {
               "Hubungkan Perangkat Anda Dengan  \nMenggunakan USB atau Bluetooth",
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: SizeConfig.screenHeight * 0.08),
+            SizedBox(height: SizeConfig.screenHeight * 0.04),
             // const SizedBox(
             //   height: 30.0,
             // ),
-            SizedBox(height: getProportionateScreenHeight(10)),
+            // SizedBox(height: getProportionateScreenHeight(10)),
             SizedBox(
-              width: MediaQuery.of(context).size.width / 2,
+              width: MediaQuery.of(context).size.width / 1.5,
               child: TextField(
                 controller: _emailController,
                 decoration: const InputDecoration(hintText: 'Email'),
               ),
             ),
-            SizedBox(height: getProportionateScreenHeight(20)),
+            // SizedBox(height: getProportionateScreenHeight(10)),
             // const SizedBox(
-            //   height: 30.0,
+            //   height: 10.0,
             // ),
             SizedBox(
-              width: MediaQuery.of(context).size.width / 2,
+              width: MediaQuery.of(context).size.width / 1.5,
               child: TextField(
                 controller: _passwordController,
                 obscureText: true,
@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            SizedBox(height: getProportionateScreenHeight(20)),
+            // SizedBox(height: getProportionateScreenHeight(10)),
             // const SizedBox(
             //   height: 30.0,
             // ),

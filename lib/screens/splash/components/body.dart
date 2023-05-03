@@ -1,3 +1,4 @@
+import 'package:co_sense/autentikasi/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:co_sense/constants.dart';
 import 'package:co_sense/screens/validasi/validasi_screen.dart';
@@ -74,6 +75,9 @@ class _BodyState extends State<Body> {
                           ),
                         );
                       },
+                      //  press: () {
+                      //    Navigator.pushNamed(context, AuthScreen.routeName);
+                      //  },
                       // press: () {
                       //   Navigator.pushNamed(context, ValidasiScreen.routeName);
                       // },
