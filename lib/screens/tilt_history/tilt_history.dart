@@ -1,73 +1,86 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_core/firebase_core.dart';
-
-class TiltHistory extends StatefulWidget {
-  static String routeName = "/tilt_history";
-
-  const TiltHistory({Key? key}) : super(key: key);
-
-  @override
-  State<TiltHistory> createState() => _TiltHistoryState();
-}
-
-class _TiltHistoryState extends State<TiltHistory> {
-  late DatabaseReference databaseReference;
-  List<dynamic> dataList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // Inisialisasi Firebase
-    Firebase.initializeApp().then((value) {
-      // Referensi database dengan URL yang diberikan
-      databaseReference = FirebaseDatabase.instance.ref().child("Info");
-      // Ambil data dari Firebase
-      databaseReference.onValue.listen((event) {
-        // Dapatkan data snapshot
-        var snapshot = event.snapshot;
-        // Ubah data snapshot menjadi List<dynamic>
-        List<dynamic>? data = snapshot.value as List<dynamic>?;
-        // Bersihkan dataList
-        dataList.clear();
-        // Tambahkan setiap data ke dalam dataList
-        data?.forEach((element) {
-          dataList.add(element);
-        });
-        // Update tampilan
-        setState(() {});
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Show Data From Firebase"),
-      ),
-      body: DataTable(
-        columns: const <DataColumn>[
-          DataColumn(label: Text('Accel X')),
-          // DataColumn(label: Text('Accel Y')),
-          // DataColumn(label: Text('Accel Z')),
-          DataColumn(label: Text('Gyro X')),
-          DataColumn(label: Text('Gyro Y')),
-          DataColumn(label: Text('Gyro Z')),
-          DataColumn(label: Text('Temperature')),
-          DataColumn(label: Text('Gyro DateTime')),
-        ],
-        rows: dataList.map((data) => DataRow(
-            cells: <DataCell>[
-              DataCell(Text('${data['accel_data_x' 'accel_data_y' 'accel_data_z']}')),
-              DataCell(Text('${data['gyro_data_x']}')),
-              DataCell(Text('${data['gyro_data_y']}')),
-              DataCell(Text('${data['gyro_data_z']}')),
-              DataCell(Text('${data['temp']}')),
-              DataCell(Text('${data['gyro_datetime']}')),
-            ]
-        )).toList(),
-      ),
-    );
-  }
-}
+// import 'dart:async';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_database/firebase_database.dart';
+// import 'package:flutter/material.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+//
+// class History extends StatefulWidget {
+//   @override
+//   _HistoryState createState() => _HistoryState();
+// }
+//
+// class _HistoryState extends State<History> {
+//   StreamSubscription<Event> _subscriptionTodo;
+//   String _todoName = "Display the todo name here";
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     initFirebase();
+//   }
+//
+//   @override
+//   void dispose() {
+//     _subscriptionTodo?.cancel();
+//     super.dispose();
+//   }
+//
+//   Future<void> initFirebase() async {
+//     final user = FirebaseAuth.instance.currentUser;
+//     if (user != null) {
+//       final todoStream =
+//           FirebaseDatabase.instance.reference().child('Status').child("-NSyyaYnKM70Y-PjDtMc").onValue;
+//       _subscriptionTodo = todoStream.listen((event) {
+//         var todo = Todo.fromSnapshot(event.snapshot);
+//         _updateTodo(todo);
+//       });
+//     } else {
+//       // Handle user not signed in.
+//       // For example, show a dialog to prompt user to sign in.
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     var itemTile = ListTile(
+//       title: Text(_todoName),
+//     );
+//
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text("App Bar Title"),
+//       ),
+//       body: ListView(
+//         children: <Widget>[
+//           itemTile,
+//         ],
+//       ),
+//     );
+//   }
+//
+//   void _updateTodo(Todo value) {
+//     setState(() {
+//       _todoName = "${value.distance ?? ''} - ${value.time ?? ''}";
+//     });
+//   }
+// }
+//
+// class Todo {
+//   final String key;
+//   final String? distance;
+//   final String? time;
+//
+//   Todo({
+//     required this.key,
+//     required this.distance,
+//     required this.time,
+//   });
+//
+//   factory Todo.fromSnapshot(DataSnapshot snapshot) {
+//     return Todo(
+//       key: snapshot.key!,
+//       distance: snapshot.value!["distance"] ?? "",
+//       time: snapshot.value!["time"] ?? "",
+//     );
+//   }
+// }

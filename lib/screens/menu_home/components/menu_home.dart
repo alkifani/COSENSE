@@ -1,6 +1,8 @@
 import 'package:co_sense/screens/distance_history/distance_history.dart';
 import 'package:co_sense/screens/speed_history/speed_history.dart';
 import 'package:co_sense/screens/speed_history/speed_history2.dart';
+import 'package:co_sense/screens/tilt_history/tilt_history.dart';
+import 'package:co_sense/screens/video_recording/video_play.dart';
 import 'package:flutter/material.dart';
 import 'package:co_sense/constants.dart';
 import 'package:co_sense/my_flutter_app_icons.dart';
@@ -136,7 +138,14 @@ class _MenuHomeState extends State<MenuHome> {
           Card(
             margin: const EdgeInsets.all(8),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VideoPlayerWidget(),
+                  ),
+                );
+              },
               splashColor: Colors.blue,
               child: Center(
                 child: Column(
@@ -152,7 +161,14 @@ class _MenuHomeState extends State<MenuHome> {
           Card(
             margin: const EdgeInsets.all(8),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => History(),
+                //   ),
+                // );
+              },
               splashColor: Colors.blue,
               child: Center(
                 child: Column(
