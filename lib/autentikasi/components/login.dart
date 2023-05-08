@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: getProportionateScreenWidth(10)),
             Text(
-              "Hubungkan Perangkat Anda Dengan  \nMenggunakan USB atau Bluetooth",
+              "Hubungkan Perangkat Anda Dengan  \nLogin melalui akun yang terdaftar!",
               textAlign: TextAlign.center,
             ),
             SizedBox(height: SizeConfig.screenHeight * 0.04),

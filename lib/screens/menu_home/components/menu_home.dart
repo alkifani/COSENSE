@@ -1,6 +1,10 @@
 import 'package:co_sense/screens/distance_history/distance_history.dart';
+import 'package:co_sense/screens/maps/gps_history.dart';
+import 'package:co_sense/screens/speed_history/speed_data_history.dart';
 import 'package:co_sense/screens/speed_history/speed_history.dart';
 import 'package:co_sense/screens/speed_history/speed_history2.dart';
+import 'package:co_sense/screens/tilt_history/components/body.dart';
+import 'package:co_sense/screens/tilt_history/components/tilt_data_history.dart';
 import 'package:co_sense/screens/tilt_history/tilt_history.dart';
 import 'package:co_sense/screens/video_recording/video_play.dart';
 import 'package:flutter/material.dart';
@@ -162,10 +166,11 @@ class _MenuHomeState extends State<MenuHome> {
             margin: const EdgeInsets.all(8),
             child: InkWell(
               onTap: () {
+                Navigator.pushNamed(context, GPSHistory.routeName);
                 // Navigator.push(
                 //   context,
                 //   MaterialPageRoute(
-                //     builder: (context) => History(),
+                //     builder: (context) => HomeData(),
                 //   ),
                 // );
               },
@@ -185,7 +190,13 @@ class _MenuHomeState extends State<MenuHome> {
             margin: const EdgeInsets.all(8),
             child: InkWell(
               onTap: () {
-                Navigator.pushNamed(context, SpeedHistory2.routeName);
+                // Navigator.pushNamed(context, SpeedHistory2.routeName);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TiltHistoryDisplay(),
+                  ),
+                );
               },
               splashColor: Colors.blue,
               child: Center(
@@ -199,29 +210,35 @@ class _MenuHomeState extends State<MenuHome> {
               ),
             ),
           ),
+          // Card(
+          //   margin: const EdgeInsets.all(8),
+          //   child: InkWell(
+          //     onTap: () {
+          //       Navigator.pushNamed(context, SpeedHistory.routeName);
+          //     },
+          //     splashColor: Colors.blue,
+          //     child: Center(
+          //       child: Column(
+          //         mainAxisSize: MainAxisSize.min,
+          //         children: const <Widget>[
+          //           Icon(MyFlutterApp.speed, size: 75, color: cocolor,),
+          //           Text("Speed History", style: TextStyle(fontSize: 17.0)),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Card(
             margin: const EdgeInsets.all(8),
             child: InkWell(
               onTap: () {
-                Navigator.pushNamed(context, SpeedHistory.routeName);
-              },
-              splashColor: Colors.blue,
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const <Widget>[
-                    Icon(MyFlutterApp.speed, size: 75, color: cocolor,),
-                    Text("Speed History", style: TextStyle(fontSize: 17.0)),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Card(
-            margin: const EdgeInsets.all(8),
-            child: InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, DistanceHistory.routeName);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DistanceHistoryDisplay(),
+                  ),
+                );
+                // Navigator.pushNamed(context, DistanceHistory.routeName);
               },
               splashColor: Colors.blue,
               child: Center(

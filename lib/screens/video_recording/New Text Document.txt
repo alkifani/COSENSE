@@ -1,59 +1,147 @@
-To show and play videos in Firebase Cloud using Flutter, you need to use the video_player and firebase_storage packages. You also need to get the download URL of the video file from Firebase Storage and pass it to the VideoPlayerController.network constructor. Here are some steps you can follow:
-
-Add the dependencies to your pubspec.yaml file:
-dependencies:
-  video_player: ^2.2.7
-  firebase_storage: ^10.0.4
-Import the packages in your Dart file:
+import 'package:co_sense/my_flutter_app_icons.dart';
+import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-Create a VideoPlayerController instance and initialize it with the download URL of the video file:
-VideoPlayerController _controller;
 
-@override
-void initState() {
-  super.initState();
-  // Get the download URL of the video file from Firebase Storage
-  FirebaseStorage.instance.ref('videos/$videoFile').getDownloadURL().then((url) {
-    // Create and initialize the video player controller
-    _controller = VideoPlayerController.network(url);
-    _controller.initialize().then((_) {
-      // Update the UI when the controller is initialized
-      setState(() {});
-    });
-  });
+class VideoPlayerWidget extends StatefulWidget {
+  const VideoPlayerWidget({Key? key}) : super(key: key);
+
+  @override
+  _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
 }
-Dispose the controller when not needed:
-@override
-void dispose() {
-  _controller.dispose();
-  super.dispose();
-}
-Display the video player widget in your build method:
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: Center(
-      child: _controller.value.isInitialized
-          ? AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: VideoPlayer(_controller),
-            )
-          : CircularProgressIndicator(),
-    ),
-    floatingActionButton: FloatingActionButton(
-      onPressed: () {
-        // Toggle the video playback state
-        setState(() {
-          _controller.value.isPlaying
-              ? _controller.pause()
-              : _controller.play();
+
+class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
+  List<String> videoUrls = [];
+  int currentIndex = 0;
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // Ambil semua video dari Firebase Storage dan simpan URL-nya ke dalam list videoUrls
+    FirebaseStorage.instance.ref('videofile/').listAll().then((result) {
+      for (var ref in result.items) {
+        ref.getDownloadURL().then((url) {
+          setState(() {
+            videoUrls.add(url);
+          });
+        }).catchError((error) {
+          debugPrint(error.toString());
         });
-      },
-      child: Icon(
-        _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+      }
+    }).catchError((error) {
+      debugPrint(error.toString());
+    });
+
+    // Inisialisasi VideoPlayerController
+    _controller = VideoPlayerController.network('');
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _playVideo(String videoUrl) {
+    // Hentikan pemutaran video sebelumnya jika ada
+    _controller.pause();
+
+    // Buat controller baru dan inisialisasi dengan videoUrl yang baru
+    _controller = VideoPlayerController.network(videoUrl);
+    _controller.initialize().then((_) {
+      setState(() {});
+      _controller.play();
+    }).catchError((error) {
+      debugPrint(error.toString());
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            // const SizedBox(width: 8),
+            const Text(
+              'Video History Data',
+              style: TextStyle(color: Colors.black),
+            ),
+            const SizedBox(width: 10),
+            const Icon(MyFlutterApp.play_button, color: Colors.black),
+            const Icon(Icons.history, color: Colors.black),
+          ],
+        ),
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-    ),
-  );
+      body: Center(
+        child: videoUrls.isEmpty
+            ? const CircularProgressIndicator()
+            : Stack(
+          children: [
+            AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: _controller.value.isInitialized
+                  ? VideoPlayer(_controller)
+                  : Container(),
+            ),
+            ListView.builder(
+              itemCount: videoUrls.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      currentIndex = index;
+                      _playVideo(videoUrls[index]);
+                    });
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        backgroundColor: Colors.transparent,
+                        content: AspectRatio(
+                          aspectRatio: _controller.value.aspectRatio,
+                          child: Stack(
+                            alignment: Alignment.bottomCenter,
+                            children: [
+                              VideoPlayer(_controller),
+                              VideoProgressIndicator(_controller,
+                                  allowScrubbing: true),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    color: currentIndex == index
+                        ? Colors.grey.withOpacity(0.5)
+                        : null,
+                    child: Row(
+                      children: [
+                        const Icon(MyFlutterApp.play_button,
+                            color: Colors.black),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            'Video ${index + 1}',
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
-For more details and examples, you can check out these web search results
