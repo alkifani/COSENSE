@@ -79,8 +79,8 @@
 //   factory Todo.fromSnapshot(DataSnapshot snapshot) {
 //     return Todo(
 //       key: snapshot.key!,
-//       distance: snapshot.value!["distance"] ?? "",
-//       time: snapshot.value!["time"] ?? "",
+//       distance: snapshot.value!["distance"],
+//       time: snapshot.value!["time"],
 //     );
 //   }
 // }

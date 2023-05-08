@@ -1,3 +1,4 @@
+import 'package:co_sense/autentikasi/components/login.dart';
 import 'package:co_sense/menu/components/menu_pic.dart';
 import 'package:co_sense/screens/speed_history/speed_history.dart';
 import 'package:co_sense/screens/validasi/validasi_screen.dart';
@@ -53,7 +54,13 @@ class Body extends StatelessWidget {
             text: "Log Out",
             icon: "assets/icons/log out.svg",
             press: () {
-              Navigator.pushNamed(context, ValidasiScreen.routeName);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginScreen(),
+                ),
+              );
+              // Navigator.pushNamed(context, ValidasiScreen.routeName);
             },
           ),
         ],

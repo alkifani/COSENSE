@@ -1,59 +1,59 @@
-import 'package:flutter/material.dart';
+import 'package:co_sense/my_flutter_app_icons.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:flutter/material.dart';
 
-class DistanceHistory extends StatefulWidget {
-  static String routeName = "/distance_history";
-
-  const DistanceHistory({Key? key}) : super(key: key);
+class DistanceHistoryDisplay extends StatefulWidget {
+  const DistanceHistoryDisplay({Key? key}) : super(key: key);
 
   @override
-  State<DistanceHistory> createState() => _DistanceHistoryState();
+  State<DistanceHistoryDisplay> createState() => _DistanceHistoryDisplayState();
 }
 
-class _DistanceHistoryState extends State<DistanceHistory> {
-  late DatabaseReference databaseReference;
-  List<Map<String, dynamic>> dataList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // Inisialisasi Firebase
-    Firebase.initializeApp().then((value) {
-      // Referensi database dengan URL yang diberikan
-      databaseReference = FirebaseDatabase.instance.ref().child("Status");
-      // Ambil data dari Firebase secara real-time
-      databaseReference.onValue.listen((event) {
-        // Dapatkan data snapshot
-        var snapshot = event.snapshot;
-        // Konversi snapshot.value menjadi tipe Map<String, dynamic>
-        Map<String, dynamic> data = snapshot.value as Map<String, dynamic>? ?? {};
-        // Bersihkan dataList
-        dataList.clear();
-        // Tambahkan data dari snapshot ke dalam dataList
-        dataList.addAll(data.entries.map((e) => {'time': e.key, 'distance': e.value}).toList());
-        // Update tampilan
-        setState(() {});
-      });
-    });
-  }
+class _DistanceHistoryDisplayState extends State<DistanceHistoryDisplay> {
+  final databaseRef = FirebaseDatabase.instance.reference().child("Status");
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Show Data From Firebase"),
-      ),
-      body: SingleChildScrollView(
-        child: DataTable(
-          columns: const <DataColumn>[
-            DataColumn(label: Text('Ultra DateTime')),
-            DataColumn(label: Text('Distance')),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            // const SizedBox(width: 8),
+            const Text(
+              'Distance Historical Data',
+              style: TextStyle(color: Colors.black),
+            ),
+            const SizedBox(width: 10),
+            const Icon(MyFlutterApp.distance, color: Colors.black),
+            const Icon(Icons.history, color: Colors.black),
           ],
-          rows: dataList.map((data) => DataRow(cells: <DataCell>[
-            DataCell(Text('${data['time'] ?? ''}')),
-            DataCell(Text('${data['distance'] ?? ''}')),
-          ])).toList(),
+        ),
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.black),
+      ),
+      body: SafeArea(
+        child: FirebaseAnimatedList(
+          query: databaseRef,
+          itemBuilder: (BuildContext context, DataSnapshot snapshot,
+              Animation<double> animation, int index) {
+            var value = snapshot.value as Map<dynamic, dynamic>?;
+            if (value == null) {
+              return const SizedBox();
+            }
+            var distance = value['distance'] as String?;
+            var time = value['ultra_datetime'] as String?;
+            if (distance == null || time == null) {
+              return const SizedBox();
+            }
+            return ListTile(
+              title: Text('Date Time: $time'),
+              subtitle: Text('Distance: $distance'),
+            );
+          },
         ),
       ),
     );
