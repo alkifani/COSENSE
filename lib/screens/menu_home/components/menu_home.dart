@@ -166,7 +166,7 @@ class _MenuHomeState extends State<MenuHome> {
             margin: const EdgeInsets.all(8),
             child: InkWell(
               onTap: () {
-                Navigator.pushNamed(context, GPSHistory.routeName);
+                Navigator.pushNamed(context, GPSHistoryDisplay.routeName);
                 // Navigator.push(
                 //   context,
                 //   MaterialPageRoute(

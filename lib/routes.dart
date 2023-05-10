@@ -1,6 +1,6 @@
 
 import 'package:co_sense/autentikasi/auth_screen.dart';
-import 'package:co_sense/screens/distance_history/distance_history.dart';
+// import 'package:co_sense/screens/distance_history/distance_history.dart';
 import 'package:co_sense/screens/maps/gps_history.dart';
 import 'package:co_sense/screens/speed_history/speed_history2.dart';
 // import 'package:co_sense/screens/tilt_history/tilt_history.dart';
@@ -23,5 +23,5 @@ final Map<String, WidgetBuilder> routes = {
   // DistanceHistory.routeName: (context) => DistanceHistory(),
   // TiltHistory.routeName: (context) => TiltHistory(),
   AuthScreen.routeName: (context) => AuthScreen(),
-  GPSHistory.routeName: (context) => GPSHistory(),
+  GPSHistoryDisplay.routeName: (context) => GPSHistoryDisplay(),
 };
