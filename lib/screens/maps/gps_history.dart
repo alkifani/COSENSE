@@ -1,60 +1,20 @@
-import 'package:flutter/material.dart';
+import 'package:co_sense/my_flutter_app_icons.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class GPSHistory extends StatefulWidget {
+class GPSHistoryDisplay extends StatefulWidget {
   static String routeName = "/gps_history";
-
-  const GPSHistory({Key? key}) : super(key: key);
+  const GPSHistoryDisplay({Key? key}) : super(key: key);
 
   @override
-  State<GPSHistory> createState() => _GPSHistoryState();
+  State<GPSHistoryDisplay> createState() => _GPSHistoryDisplayState();
 }
 
-class _GPSHistoryState extends State<GPSHistory> {
-  String locationMessage = "Current Location of The User";
-  late String lat;
-  late String long;
+class _GPSHistoryDisplayState extends State<GPSHistoryDisplay> {
+  final databaseRef = FirebaseDatabase.instance.reference().child("locations");
 
-  Future<Position> _getCurrentLocation() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error("Location permissions are denied!");
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          "Location permissions are permanently denied, we cannot request"
-      );
-    }
-    return await Geolocator.getCurrentPosition();
-  }
-
-  void _liveLocation() {
-    LocationSettings locationSettings = const LocationSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 100,
-
-    );
-    Geolocator.getPositionStream(locationSettings: locationSettings)
-        .listen((Position position) {
-      lat = position.latitude.toString();
-      long = position.longitude.toString();
-
-      setState(() {
-        locationMessage = 'Latitude: $lat , Longtitude: $long';
-      });
-    });
-  }
   Future<void> _openMap(String lat, String long) async {
     String googleURL = 'https://www.google.com/maps/search/?api=1&query=$lat,$long';
     await canLaunch(googleURL)
@@ -62,40 +22,68 @@ class _GPSHistoryState extends State<GPSHistory> {
         : throw 'Could not launch $googleURL';
   }
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: const Text("Flutter User Location"),
-      centerTitle: true,
-    ),
-    body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(locationMessage, textAlign: TextAlign.center),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              _getCurrentLocation().then((value) {
-                lat = '${value.latitude}';
-                long = '${value.longitude}';
-                setState(() {
-                  locationMessage = 'latitude: $lat , Longtitude: $long';
-                });
-                _liveLocation();
-              });
-            },
-            child: const Text("Get Current Location"),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              _openMap(lat, long);
-            },
-            child: const Text("Open Google Map"),
-          ),
-        ],
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            // const SizedBox(width: 8),
+            const Text(
+              'GPS Historical Data',
+              style: TextStyle(color: Colors.black),
+            ),
+            const SizedBox(width: 10),
+            const Icon(MyFlutterApp.maps, color: Colors.black),
+            const Icon(Icons.history, color: Colors.black),
+          ],
+        ),
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-    ),
-  );
-
+      body: SafeArea(
+        child: FirebaseAnimatedList(
+          query: databaseRef,
+          itemBuilder: (BuildContext context, DataSnapshot snapshot,
+              Animation<double> animation, int index) {
+            dynamic value = snapshot.value;
+            if (!(value is Map<dynamic, dynamic>)) {
+              return const SizedBox();
+            }
+            // Map<dynamic, dynamic>? value = snapshot.value as Map<dynamic, dynamic>?;
+            // if (value == null) {
+            //   return const SizedBox();
+            // }
+            String? latitude = value['latitude']?.toString();
+            String? longitude = value['longitude']?.toString();
+            String? time = value['Time'] as String?;
+            if (latitude == null || longitude == null || time == null) {
+              return const SizedBox();
+            }
+            return ListTile(
+              title: Text('Time: $time'),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  Text('Data Latitude: ${double.tryParse(latitude)?.toStringAsFixed(8) ?? ''}'),
+                  const SizedBox(height: 10),
+                  Text('Data Longitude: ${double.tryParse(longitude)?.toStringAsFixed(8) ?? ''}'),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      _openMap(latitude, longitude);
+                    },
+                    child: const Text("Open Google Map"),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
 }
