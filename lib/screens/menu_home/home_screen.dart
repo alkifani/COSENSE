@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'components/body.dart';
 
 class HomeScreen extends StatefulWidget {
-  static String routeName = "/home";
+  static String routeName = "/halaman_utama";
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

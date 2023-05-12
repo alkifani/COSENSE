@@ -1,8 +1,9 @@
 
 import 'package:co_sense/autentikasi/auth_screen.dart';
+import 'package:co_sense/screens/distance_history/distance_history.dart';
 // import 'package:co_sense/screens/distance_history/distance_history.dart';
 import 'package:co_sense/screens/maps/gps_history.dart';
-import 'package:co_sense/screens/speed_history/speed_history2.dart';
+//import 'package:co_sense/screens/speed_history/speed_history2.dart';
 // import 'package:co_sense/screens/tilt_history/tilt_history.dart';
 import 'package:flutter/widgets.dart';
 import 'package:co_sense/screens/splash/splash_screen.dart';
@@ -19,8 +20,8 @@ final Map<String, WidgetBuilder> routes = {
   HomeScreen.routeName: (context) => HomeScreen(),
   MenuScreen.routeName: (context) => MenuScreen(),
   SpeedHistory.routeName: (context) => SpeedHistory(),
-  SpeedHistory2.routeName: (context) => SpeedHistory2(),
-  // DistanceHistory.routeName: (context) => DistanceHistory(),
+  //SpeedHistory2.routeName: (context) => SpeedHistory2(),
+  DistanceHistoryDisplay.routeName: (context) => DistanceHistoryDisplay(),
   // TiltHistory.routeName: (context) => TiltHistory(),
   AuthScreen.routeName: (context) => AuthScreen(),
   GPSHistoryDisplay.routeName: (context) => GPSHistoryDisplay(),

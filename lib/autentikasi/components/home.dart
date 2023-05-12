@@ -15,7 +15,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 2), () {
-      Navigator.pushNamed(context, "/home");
+      Navigator.pushNamed(context, "/halaman_utama");
     });
   }
 
@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
         title: const Text('Home'),
       ),
       body: Center(
-        child: Text('Welcome ${widget.email}!'),
+        child: Text('Welcome To Co-SENSE ${widget.email}!'),
       ),
     );
   }

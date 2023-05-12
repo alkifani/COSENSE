@@ -1,8 +1,10 @@
+import 'package:co_sense/screens/distance_history/current_distance.dart';
 import 'package:co_sense/screens/distance_history/distance_history.dart';
+import 'package:co_sense/screens/maps/current_gps.dart';
 import 'package:co_sense/screens/maps/gps_history.dart';
 import 'package:co_sense/screens/speed_history/speed_data_history.dart';
 import 'package:co_sense/screens/speed_history/speed_history.dart';
-import 'package:co_sense/screens/speed_history/speed_history2.dart';
+//import 'package:co_sense/screens/speed_history/speed_history2.dart';
 import 'package:co_sense/screens/tilt_history/components/body.dart';
 import 'package:co_sense/screens/tilt_history/components/tilt_data_history.dart';
 import 'package:co_sense/screens/tilt_history/tilt_history.dart';
@@ -166,13 +168,13 @@ class _MenuHomeState extends State<MenuHome> {
             margin: const EdgeInsets.all(8),
             child: InkWell(
               onTap: () {
-                Navigator.pushNamed(context, GPSHistoryDisplay.routeName);
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => HomeData(),
-                //   ),
-                // );
+                // Navigator.pushNamed(context, GPSHistoryDisplay.routeName);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CurrentGPSHistoryDisplay(),
+                  ),
+                );
               },
               splashColor: Colors.blue,
               child: Center(
@@ -235,7 +237,7 @@ class _MenuHomeState extends State<MenuHome> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DistanceHistoryDisplay(),
+                    builder: (context) => CurrentDistanceHistory(),
                   ),
                 );
                 // Navigator.pushNamed(context, DistanceHistory.routeName);
