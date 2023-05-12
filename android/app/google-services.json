@@ -32,10 +32,46 @@
               "client_type": 3
             },
             {
-              "client_id": "570220862213-hsh7n0iqnvkhcp7dqr4gm4tk83ha6rof.apps.googleusercontent.com",
+              "client_id": "570220862213-cmnrk3egb5ibt9p9bjp0f1ie9gv7mpig.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.coSense"
+                "bundle_id": "com.example.cosenseLoc"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570220862213:android:7b94c3c1626730d5bbb56c",
+        "android_client_info": {
+          "package_name": "com.example.cosense_loc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "570220862213-7qjjq29p29cjcn65gqo2rniso4t5g3aj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBFzXJDoVgYf_k4rdEM_Jflb4QNoKNRoI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "570220862213-7qjjq29p29cjcn65gqo2rniso4t5g3aj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "570220862213-cmnrk3egb5ibt9p9bjp0f1ie9gv7mpig.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cosenseLoc"
               }
             }
           ]
@@ -68,10 +104,10 @@
               "client_type": 3
             },
             {
-              "client_id": "570220862213-hsh7n0iqnvkhcp7dqr4gm4tk83ha6rof.apps.googleusercontent.com",
+              "client_id": "570220862213-cmnrk3egb5ibt9p9bjp0f1ie9gv7mpig.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.coSense"
+                "bundle_id": "com.example.cosenseLoc"
               }
             }
           ]
@@ -104,10 +140,10 @@
               "client_type": 3
             },
             {
-              "client_id": "570220862213-hsh7n0iqnvkhcp7dqr4gm4tk83ha6rof.apps.googleusercontent.com",
+              "client_id": "570220862213-cmnrk3egb5ibt9p9bjp0f1ie9gv7mpig.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.coSense"
+                "bundle_id": "com.example.cosenseLoc"
               }
             }
           ]

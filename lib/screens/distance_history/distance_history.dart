@@ -4,6 +4,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 
 class DistanceHistoryDisplay extends StatefulWidget {
+  static String routeName = "/distance_history";
   const DistanceHistoryDisplay({Key? key}) : super(key: key);
 
   @override
