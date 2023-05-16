@@ -1,13 +1,8 @@
 import 'package:co_sense/screens/distance_history/current_distance.dart';
-import 'package:co_sense/screens/distance_history/distance_history.dart';
 import 'package:co_sense/screens/maps/current_gps.dart';
-import 'package:co_sense/screens/maps/gps_history.dart';
-import 'package:co_sense/screens/speed_history/speed_data_history.dart';
-import 'package:co_sense/screens/speed_history/speed_history.dart';
-//import 'package:co_sense/screens/speed_history/speed_history2.dart';
-import 'package:co_sense/screens/tilt_history/components/body.dart';
-import 'package:co_sense/screens/tilt_history/components/tilt_data_history.dart';
-import 'package:co_sense/screens/tilt_history/tilt_history.dart';
+import 'package:co_sense/screens/tilt_history/current_tilt.dart';
+import 'package:co_sense/screens/tilt_history/tilt_data_history.dart';
+import 'package:co_sense/screens/video_recording/current_video.dart';
 import 'package:co_sense/screens/video_recording/video_play.dart';
 import 'package:flutter/material.dart';
 import 'package:co_sense/constants.dart';
@@ -148,7 +143,8 @@ class _MenuHomeState extends State<MenuHome> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => VideoPlayerWidget(),
+                    builder: (context) => CurrentVideoPlayer(),
+                    // builder: (context) => VideoPlayerWidget(),
                   ),
                 );
               },
@@ -192,11 +188,11 @@ class _MenuHomeState extends State<MenuHome> {
             margin: const EdgeInsets.all(8),
             child: InkWell(
               onTap: () {
-                // Navigator.pushNamed(context, SpeedHistory2.routeName);
+                // Navigator.pushNamed(context, TiltHistoryDisplay.routeName);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TiltHistoryDisplay(),
+                    builder: (context) => CurrentTiltHistoryDisplay(),
                   ),
                 );
               },

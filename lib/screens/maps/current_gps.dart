@@ -28,21 +28,19 @@ class _CurrentGPSHistoryDisplayState extends State<CurrentGPSHistoryDisplay> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
-          'GPS Historical Data',
-          style: TextStyle(color: Colors.black),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            // const SizedBox(width: 8),
+            const Text(
+              'GPS Historical Data',
+              style: TextStyle(color: Colors.black),
+            ),
+            const SizedBox(width: 10),
+            const Icon(MyFlutterApp.maps, color: Colors.black),
+          ],
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(MyFlutterApp.maps, color: Colors.black),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.history, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
         iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Center(

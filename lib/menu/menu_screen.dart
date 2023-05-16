@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'components/body2.dart';
+import 'components/body.dart';
 
 class MenuScreen extends StatefulWidget {
   static String routeName = "/menu";
@@ -16,7 +16,7 @@ class _MenuScreenState extends State<MenuScreen> {
       appBar: AppBar(
         title: Text("menu"),
       ),
-      body: Body(),
+      body: NavMenu(),
     );
   }
 }

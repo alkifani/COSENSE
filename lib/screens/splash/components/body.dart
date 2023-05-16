@@ -1,4 +1,5 @@
 import 'package:co_sense/autentikasi/auth_screen.dart';
+import 'package:co_sense/screens/menu_home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:co_sense/constants.dart';
 import 'package:co_sense/screens/validasi/validasi_screen.dart';
@@ -68,12 +69,13 @@ class _BodyState extends State<Body> {
                     DefaultButton(
                       text: "Continue",
                       press: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
-                          ),
-                        );
+                        Navigator.pushNamed(context, HomeScreen.routeName);
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => LoginScreen(),
+                        //   ),
+                        // );
                       },
                       //  press: () {
                       //    Navigator.pushNamed(context, AuthScreen.routeName);

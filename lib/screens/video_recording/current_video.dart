@@ -1,35 +1,29 @@
 import 'package:chewie/chewie.dart';
 import 'package:co_sense/my_flutter_app_icons.dart';
+import 'package:co_sense/screens/video_recording/video_play.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class VideoPlayerWidget extends StatefulWidget {
-  static String routeName = "/video_play";
-  const VideoPlayerWidget({Key? key}) : super(key: key);
+class CurrentVideoPlayer extends StatefulWidget {
+  const CurrentVideoPlayer({Key? key}) : super(key: key);
 
   @override
-  _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
+  _CurrentVideoPlayerState createState() => _CurrentVideoPlayerState();
 }
 
-class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
-  List<String> videoUrls = [];
-  int currentIndex = 0;
+class _CurrentVideoPlayerState extends State<CurrentVideoPlayer> {
+  String latestVideoUrl = '';
 
   @override
   void initState() {
     super.initState();
-    // Ambil semua video dari Firebase Storage dan simpan URL-nya ke dalam list videoUrls
-    FirebaseStorage.instance.ref('videofile/').listAll().then((result) {
-      for (var ref in result.items) {
-        ref.getDownloadURL().then((url) {
-          setState(() {
-            videoUrls.add(url);
-          });
-        }).catchError((error) {
-          debugPrint(error.toString());
-        });
-      }
+    // Ambil daftar video dari Firebase Storage
+    FirebaseStorage.instance.ref('videofile/').listAll().then((result) async {
+      // Ambil video terbaru
+      final latestVideoRef = result.items.last;
+      latestVideoUrl = await latestVideoRef.getDownloadURL();
+      setState(() {});
     }).catchError((error) {
       debugPrint(error.toString());
     });
@@ -51,48 +45,52 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             ),
             const SizedBox(width: 10),
             const Icon(MyFlutterApp.play_button, color: Colors.black),
-            const Icon(Icons.history, color: Colors.black),
           ],
         ),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: Center(
-        child: videoUrls.isEmpty
-            ? const CircularProgressIndicator()
-            : ListView.builder(
-          itemCount: videoUrls.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () async {
-                showDialog(
-                  context: context,
-                  builder: (_) {
-                    return ChewieDialog(videoUrl: videoUrls[index]);
-                  },
-                );
-              },
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                color: currentIndex == index
-                    ? Colors.grey.withOpacity(0.5)
-                    : null,
-                child: Row(
-                  children: [
-                    const Icon(MyFlutterApp.play_button,
-                        color: Colors.black),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        'Video ${index + 1}',
-                        style: const TextStyle(color: Colors.black),
-                      ),
+      body: SafeArea(
+        child: Center(
+          child: latestVideoUrl.isEmpty
+              ? const CircularProgressIndicator()
+              : GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (_) {
+                  return ChewieDialog(videoUrl: latestVideoUrl);
+                },
+              );
+            },
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    MyFlutterApp.play_button,
+                    color: Colors.black,
+                    size: 50,
+                  ),
+                  Text(
+                    'Latest Video',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      backgroundColor: Colors.grey,
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 15),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(
+                          context, VideoPlayerWidget.routeName);
+                    },
+                    child: const Text("Full Data Video History"),
+                  ),
+                ],
               ),
-            );
-          },
+            ),
+          ),
         ),
       ),
     );
@@ -117,7 +115,6 @@ class _ChewieDialogState extends State<ChewieDialog> {
     _chewieController = ChewieController(
       videoPlayerController: VideoPlayerController.network(widget.videoUrl),
       autoInitialize: true,
-      looping: true,
       aspectRatio: 16 / 9,
       allowedScreenSleep: false,
       errorBuilder: (context, errorMessage) {

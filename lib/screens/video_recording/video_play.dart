@@ -1,9 +1,18 @@
+import 'package:chewie/chewie.dart';
 import 'package:co_sense/my_flutter_app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+class VideoInfo {
+  String url;
+  DateTime date;
+
+  VideoInfo({required this.url, required this.date});
+}
+
 class VideoPlayerWidget extends StatefulWidget {
+  static String routeName = "/video_play";
   const VideoPlayerWidget({Key? key}) : super(key: key);
 
   @override
@@ -11,18 +20,24 @@ class VideoPlayerWidget extends StatefulWidget {
 }
 
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
-  List<String> videoUrls = [];
+  List<VideoInfo> videoInfos = [];
   int currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    // Ambil semua video dari Firebase Storage dan simpan URL-nya ke dalam list videoUrls
+    // Ambil semua video dari Firebase Storage dan simpan URL-nya ke dalam list videoInfos
     FirebaseStorage.instance.ref('videofile/').listAll().then((result) {
       for (var ref in result.items) {
-        ref.getDownloadURL().then((url) {
-          setState(() {
-            videoUrls.add(url);
+        ref.getMetadata().then((metadata) {
+          final date = metadata.updated ?? metadata.timeCreated!;
+          ref.getDownloadURL().then((url) {
+            setState(() {
+              videoInfos.add(VideoInfo(url: url, date: date));
+              videoInfos.sort((a, b) => b.date.compareTo(a.date));
+            });
+          }).catchError((error) {
+            debugPrint(error.toString());
           });
         }).catchError((error) {
           debugPrint(error.toString());
@@ -44,7 +59,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
           children: [
             // const SizedBox(width: 8),
             const Text(
-              'Video History Data',
+              'Full Video History Data',
               style: TextStyle(color: Colors.black),
             ),
             const SizedBox(width: 10),
@@ -56,17 +71,19 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Center(
-        child: videoUrls.isEmpty
+        child: videoInfos.isEmpty
             ? const CircularProgressIndicator()
             : ListView.builder(
-          itemCount: videoUrls.length,
+          itemCount: videoInfos.length,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () async {
                 showDialog(
                   context: context,
                   builder: (_) {
-                    return VideoDialog(videoUrl: videoUrls[index]);
+                    return ChewieDialog(
+                      videoUrl: videoInfos[index].url,
+                    );
                   },
                 );
               },
@@ -82,7 +99,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'Video ${index + 1}',
+                        'Video ${index + 1} - ${videoInfos[index].date.toIso8601String()}',
                         style: const TextStyle(color: Colors.black),
                       ),
                     ),
@@ -97,31 +114,42 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   }
 }
 
-class VideoDialog extends StatefulWidget {
+class ChewieDialog extends StatefulWidget {
   final String videoUrl;
 
-  const VideoDialog({required this.videoUrl});
+  const ChewieDialog({required this.videoUrl});
 
   @override
-  _VideoDialogState createState() => _VideoDialogState();
+  _ChewieDialogState createState() => _ChewieDialogState();
 }
 
-class _VideoDialogState extends State<VideoDialog> {
-  late VideoPlayerController _controller;
+class _ChewieDialogState extends State<ChewieDialog> {
+  late ChewieController _chewieController;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(widget.videoUrl);
-    _controller.initialize().then((_) {
-      setState(() {});
-      _controller.play();
-    });
+    _chewieController = ChewieController(
+      videoPlayerController: VideoPlayerController.network(widget.videoUrl),
+      autoInitialize: true,
+      looping: true,
+      aspectRatio: 16 / 9,
+      allowFullScreen: true,
+      allowedScreenSleep: false,
+      errorBuilder: (context, errorMessage) {
+        return Center(
+          child: Text(
+            errorMessage,
+            style: const TextStyle(color: Colors.white),
+          ),
+        );
+      },
+    );
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _chewieController.dispose();
     super.dispose();
   }
 
@@ -129,31 +157,9 @@ class _VideoDialogState extends State<VideoDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       child: AspectRatio(
-        aspectRatio: _controller.value.aspectRatio,
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            VideoPlayer(_controller),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FloatingActionButton(
-                child: Icon(
-                  _controller.value.isPlaying
-                      ? Icons.pause
-                      : Icons.play_arrow,
-                ),
-                onPressed: () {
-                  setState(() {
-                    if (_controller.value.isPlaying) {
-                      _controller.pause();
-                    } else {
-                      _controller.play();
-                    }
-                  });
-                },
-              ),
-            ),
-          ],
+        aspectRatio: 16 / 9,
+        child: Chewie(
+          controller: _chewieController,
         ),
       ),
     );
