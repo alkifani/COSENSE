@@ -1,0 +1,92 @@
+import 'package:co_sense/my_flutter_app_icons.dart';
+import 'package:co_sense/screens/tilt_history/tilt_data_history.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:flutter/material.dart';
+
+class CurrentTiltHistoryDisplay extends StatefulWidget {
+  const CurrentTiltHistoryDisplay({Key? key}) : super(key: key);
+
+  @override
+  State<CurrentTiltHistoryDisplay> createState() => _CurrentTiltHistoryDisplayState();
+}
+
+class _CurrentTiltHistoryDisplayState extends State<CurrentTiltHistoryDisplay> {
+  final databaseRef = FirebaseDatabase.instance.reference().child("Status").orderByChild('gyro_datetime').limitToLast(1);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            // const SizedBox(width: 8),
+            const Text(
+              'Tilt Historical Data',
+              style: TextStyle(color: Colors.black),
+            ),
+            const SizedBox(width: 10),
+            const Icon(MyFlutterApp.gyroscope, color: Colors.black),
+          ],
+        ),
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.black),
+      ),
+      body: Center(
+        child: SafeArea(
+          child: FirebaseAnimatedList(
+            query: databaseRef,
+            itemBuilder: (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
+              var value = snapshot.value as Map<dynamic, dynamic>?;
+              if (value == null) {
+                return const SizedBox();
+              }
+
+              var acceldatax = value['accel_data_x'] as num?;
+              var acceldatay = value['accel_data_y'] as num?;
+              var acceldataz = value['accel_data_z'] as num?;
+              if (acceldatax == null || acceldatay == null || acceldataz == null) {
+                return const SizedBox();
+              }
+
+              var time = value['gyro_datetime'] as String?;
+              var gyrodatax = value['gyro_data_x'] as num?;
+              var gyrodatay = value['gyro_data_y'] as num?;
+              var gyrodataz = value['gyro_data_z'] as num?;
+              if (time == null || gyrodatax == null || gyrodatay == null || gyrodataz == null) {
+                return const SizedBox();
+              }
+
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 100),
+                  Center(child: Text('Time: $time')),
+                  const SizedBox(height: 10),
+                  Text('Data Gyro_data_x: ${gyrodatax.toStringAsFixed(5)}'),
+                  Text('Data Gyro_data_y: ${gyrodatay.toStringAsFixed(5)}'),
+                  Text('Data Gyro_data_z: ${gyrodataz.toStringAsFixed(5)}'),
+                  const SizedBox(height: 15),
+                  Text('Data Accel_data_x: ${acceldatax.toStringAsFixed(5)}'),
+                  Text('Data Accel_data_y: ${acceldatay.toStringAsFixed(5)}'),
+                  Text('Data Accel_data_z: ${acceldataz.toStringAsFixed(5)}'),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, TiltHistoryDisplay.routeName);
+                    },
+                    child: const Text("Full Data Tilt History"),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -52,7 +52,7 @@ class _DistanceHistoryDisplayState extends State<DistanceHistoryDisplay> {
             }
             return ListTile(
               title: Text('Date Time: $time'),
-              subtitle: Text('Distance: $distance'),
+              subtitle: Text('Distance: $distance cm'),
             );
           },
         ),
